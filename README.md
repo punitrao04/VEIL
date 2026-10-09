@@ -21,6 +21,9 @@
   <a href="#technology-stack">Technology</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#security--privacy">Security</a>
+  <p align="center">
+  <a href="https://VEIL0.netlify.app">🌐 Live Demo </a>
+</p>
 </p>
 
 ---
@@ -42,6 +45,12 @@ Messages are encrypted in the browser before being stored in the backend.
 > **No traditional registration. No public profiles. Just a private room.**
 
 ---
+
+## 🌐 Live Demo
+
+Try VEIL here:
+
+**[Launch VEIL →](https://VEIL0.netlify.app)**
 
 ## ✨ Features
 
