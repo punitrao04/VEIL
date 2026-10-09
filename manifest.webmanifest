@@ -1,0 +1,12 @@
+{
+  "name": "VEIL",
+  "short_name": "VEIL",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#0f0f0f",
+  "description": "Private, anonymous real-time chat with client-side AES-GCM encryption.",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

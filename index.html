@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f8f8f8" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="VEIL is a privacy-first real-time chat with client-side AES-GCM encryption.">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <title>VEIL</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Landing page (visible first, hidden when a chat is open) -->
+    <div id="landing-page">
+
+        <nav>
+            <div class="logo">VEIL</div>
+            <div class="nav-links">
+                <a href="SECURITY.md">Security</a>
+                <a href="DOCS.md">Docs</a>
+            </div>
+        </nav>
+
+        <main>
+            <section class="hero">
+                <h1>Start a Private Chat.</h1>
+                <p>Instant, anonymous rooms. No history. No traces. Just clear, secure communication that disappears
+                    when you're done.</p>
+                <button class="cta-button" onclick="createNewRoom()">Generate Private Link</button>
+                <p class="cta-subtext">No registration required</p>
+            </section>
+
+            <section class="magic-link-section">
+                <div class="link-preview">
+                    <p class="hash-text" id="hashText">example.com/#3f454rf</p>
+                    <button class="copy-icon" onclick="copyHash()" aria-label="Copy link" title="Copy link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="1.75">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="magic-caption">This unique cryptographic hash ensures only those with the link can access the
+                    room.</p>
+            </section>
+
+            <section class="features-section">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Zero Trace</h3>
+                        <p>Encrypted messages are stored temporarily in the room database. Use Destroy Room to remove the room data; closing your tab removes your presence.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Client-Side Encryption</h3>
+                        <p>Data is encrypted before leaving your device. End-to-end encryption ensures only participants can
+                            read messages.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Truly Anonymous</h3>
+                        <p>No profile is required. The app uses an anonymous Firebase session only for database access and does not display an account identity.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="workflow-section">
+                <h2 class="workflow-title">How it works</h2>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <span class="step-label">Generate</span>
+                        <p class="step-content">When you click on the generate private link, a unique 7-character hash is
+                            created.</p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <span class="step-label">Invite</span>
+                        <p class="step-content">Now you and your friend both can chat on that generated Link.</p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <span class="step-label">Vanish</span>
+                        <p class="step-content">When you're done chatting just leave that chat, it will be deleted
+                            immediately.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="PRIVACY.md">Privacy</a>
+                    <a href="TERMS.md">Terms</a>
+                    <a href="https://github.com/Vanshdeveloper/hashchat">GitHub</a>
+                </div>
+                <p class="copyright">© 2026 VEIL</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Chat page (hidden by default, shown when a room is created or joined) -->
+    <div id="chat-page">
+        <nav class="chat-nav">
+            <div class="chat-logo">VEIL</div>
+            <div class="chat-status">
+                <span id="room-id-display"></span>
+                <small id="connection-status">Connecting…</small>
+            </div>
+            <div class="chat-actions">
+                <button class="chat-action-btn" onclick="copyHash()" title="Copy private link">Copy link</button>
+                <button class="chat-action-btn danger" onclick="destroyRoom()" title="Destroy room">Destroy</button>
+                <button class="chat-action-btn" onclick="leaveRoom()" title="Leave room">Leave</button>
+            </div>
+        </nav>
+
+        <div class="chat-toolbar">
+            <div class="room-info">
+                <span class="presence-dot"></span><span id="participant-count">0 participants</span>
+                <span id="expiry-timer">24h room</span>
+            </div>
+            <div class="search-wrap">
+                <input id="message-search" type="search" placeholder="Search messages…" autocomplete="off">
+                <button id="clear-search" type="button" aria-label="Clear search">×</button>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-stream" id="chat-stream"></div>
+            <div id="typing-indicator" class="typing-indicator" aria-live="polite"></div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <button class="input-icon" id="attach-btn" title="Share a file or image" aria-label="Share a file or image">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="1.75">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 11.5l-8.6 8.6a5.5 5.5 0 01-7.8-7.8l8.6-8.6a3.7 3.7 0 115.2 5.2l-8.6 8.6a1.8 1.8 0 01-2.6-2.6l7.9-7.9" />
+                    </svg>
+                </button>
+                <input id="file-input" type="file" hidden accept="image/*,.pdf,.txt,.csv,.zip,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                <input type="text" id="message-input" placeholder="Type a message…" maxlength="2000" autocomplete="off">
+                <button class="send-btn" onclick="sendMessage()" aria-label="Send message" title="Send">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6" />
+                    </svg>
+                </button>
+            </div>
+            <p class="encryption-note">AES-GCM encrypted in your browser. Your private key stays in the URL fragment.</p>
+        </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(console.warn);</script>
+</body>
+
+</html>
